@@ -1,0 +1,28 @@
+name: Fetch Exynos DTS
+
+on:
+  workflow_dispatch: # يسمح لك بتشغيل السكربت يدوياً بضغطة زر
+
+jobs:
+  fetch-dts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout specific directory
+        run: |
+          # إنشاء مجلد للعمل
+          mkdir kernel_dts && cd kernel_dts
+          git init
+          # إضافة المستودع المستهدف
+          git remote add origin https://github.com/ioiwww/android_kernel_samsung_exynos9820.git
+          # تفعيل خاصية السحب الجزئي (Sparse Checkout) لسحب مجلد الـ DTS فقط
+          git config core.sparseCheckout true
+          echo "arch/arm64/boot/dts/exynos/" >> .git/info/sparse-checkout
+          # سحب الفرع المحدد (lineage-23.2)
+          git pull origin lineage-23.2
+          
+      - name: Upload DTS Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Exynos-DTS-Files
+          path: kernel_dts/arch/arm64/boot/dts/exynos/
+          retention-days: 5 # سيبقى الملف متاحاً للتحميل لمدة 5 أيام
