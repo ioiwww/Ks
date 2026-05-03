@@ -1,7 +1,7 @@
 name: Fetch Exynos DTS
 
 on:
-  workflow_dispatch: # يسمح لك بتشغيل السكربت يدوياً بضغطة زر
+  [workflow_dispatch,push] # يسمح لك بتشغيل السكربت يدوياً بضغطة زر
 
 jobs:
   fetch-dts:
